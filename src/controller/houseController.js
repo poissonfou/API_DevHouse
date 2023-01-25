@@ -1,25 +1,23 @@
-const yup = require('yup');// Para trabalhar com verificação de campos. E.g impedir que se registre casa
+const yup = require('yup');
 const House = require('../model/House');
 const User = require('../model/User');
-// sem endereço por exemplo, ele vai usar a biblioteca yup.
 
 class HouseController {
-  async index(req, res) { // estrutura para retornar casas registradas
-    // a filtragem vai ser feita no insomnia com query params, setando status para true
+  async index(req, res) {
     const { status } = req.query;
     const houses = await House.find({ status });
     return res.json(houses);
   }
 
   async store(req, res) {
-    const schema = yup.object().shape({ // cria o modelo de verificação
-      description: yup.string().required(), // define o tipo do campo e diz que é obrigatório preenche-lo
+    const schema = yup.object().shape({
+      description: yup.string().required(),
       price: yup.number().required(),
       location: yup.string().required(),
       status: yup.boolean().required(),
     });
 
-    const { filename } = req.file; // pega os arquivos da requisição e id do header
+    const { filename } = req.file;
     const {
       description, price, location, status,
     } = req.body;
@@ -32,7 +30,7 @@ class HouseController {
     const house = await House.create({
       user: user_id,
       thumbnail: filename,
-      description, // aqui ele não passa valores porque o nome das variáveis e o nome usado no Schema é igual
+      description,
       price,
       location,
       status,
@@ -42,8 +40,8 @@ class HouseController {
   }
 
   async update(req, res) {
-    const schema = yup.object().shape({ // cria o modelo de verificação
-      description: yup.string().required(), // define o tipo do campo e diz que é obrigatório preenche-lo
+    const schema = yup.object().shape({
+      description: yup.string().required(),
       price: yup.number().required(),
       location: yup.string().required(),
       status: yup.boolean().required(),
@@ -70,13 +68,13 @@ class HouseController {
     await House.updateOne({ _id: house_id }, {
       user: user_id,
       thumbnail: filename,
-      description, // aqui ele não passa valores porque o nome das variáveis e o nome usado no Schema é igual
+      description,
       price,
       location,
       status,
     });
 
-    return res.send();// faz assim pra que não retorne o json com as infos do servidor
+    return res.send();
   }
 
   async destroy(req, res) {

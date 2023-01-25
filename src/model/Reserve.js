@@ -2,11 +2,11 @@ const { Schema, model } = require('mongoose');
 
 const ReserveSchema = new Schema({
     date: String,
-    user: { //pega usuário fazendo reserva
+    user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    house: { //pega o id da casa reservada
+    house: {
         type: Schema.Types.ObjectId,
         ref: 'House'
     }
